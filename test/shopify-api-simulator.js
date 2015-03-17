@@ -1,3 +1,5 @@
+/* jshint node: true */
+/* global Npm */
 "use strict";
 
 var express = Npm.require("express");
@@ -622,7 +624,7 @@ var filterOrders = function(filters) {
     }
 
     return matching;
-}
+};
 
 app.get("/admin/orders/count.json", function(req, res) {
     var matching = filterOrders(req.query);
@@ -744,7 +746,7 @@ var filterProducts = function(filters) {
     }
 
     return matching;
-}
+};
 
 app.get("/admin/products/count.json", function(req, res) {
     var matching = filterProducts(req.query);

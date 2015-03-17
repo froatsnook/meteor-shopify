@@ -1,0 +1,5 @@
+{
+    // Don't care about function form of "use strict" because Meteor
+    "-W097": true
+}
+

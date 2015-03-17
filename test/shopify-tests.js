@@ -16,6 +16,12 @@
 // test.ok(doc)
 // test.fail(doc)
 
+/* global Meteor */
+/* global check */
+/* global Tinytest */
+/* global Shopify */
+/* global Meteor */
+
 "use strict";
 
 var newAPI = function(options) {
@@ -43,7 +49,7 @@ if (Meteor.isServer) {
             var params = [];
 
             var m;
-            while (m = paramFinder.exec(info.path)) {
+            while ((m = paramFinder.exec(info.path))) {
                 params.push(m[1]);
             }
 
