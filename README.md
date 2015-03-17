@@ -248,6 +248,14 @@ With each reply, Shopify returns a `X-Shopify-Shopify` header like `"32/40"`.  O
      authenticator.getPermanentAccessToken(code);
 ```
 
+## Testing
+
+Tests can be run using:
+
+`meteor test-packages ./`
+
+This starts a Shopify API Simulator and runs tests, which can be checked at `http://localhost:3000/`.
+
 ## API
 
 Each function takes an optional parameter, `options`.  See the Shopify API documentation for details on supported options and return types.
