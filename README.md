@@ -1,7 +1,7 @@
 Shopify API access for Meteor.
 
-## Simple, Convenient, Synchronous Shopify API
-```
+## Simple, Convenient, Synchronous
+```javascript
 // Server
 var api = new Shopify.API({
     shop: "your-shop",
@@ -22,13 +22,13 @@ var order102420 = api.getOrder({ id: 102420 });
 console.log(order102420); // => { name: "#2022", ... }
 ```
 
-## Public+Private Apps
+## Public & Private Apps
 This package supports both Public and Private Apps.
 
 ### Private Apps
 If you just want to access your own shop's data, then it's easiest to make a Private App.  Login to your Shopify Partner account and create it, and take note of your `api_key` and `password`.
 
-```
+```javascript
 // Private App API access
 ShopifyAPI = new Shopify.API({
     shop: "your-shop",
@@ -38,9 +38,9 @@ ShopifyAPI = new Shopify.API({
 ```
 
 ### Public Apps
-If you need to access multiple shops, then you need a Public App.  The first time a user uses your app, they will need to authenticate with OAuth 2.  But the access code returned from Shopify can be turned into a permanent `access_token`.
+If you need to access multiple shops, then you need a Public App.  The first time a user uses your app, they will need to authenticate with OAuth 2.  But the access code returned from Shopify can be turned into a permanent `access_token`.  Login to your Shopify Partner account and create your Public App, and take note of your `api_key` and `secret`.
 
-```
+```javascript
 // First-time Public App API access
 
 // On the client.
@@ -59,7 +59,7 @@ var authenticator = new Shopify.PublicAppOAuthAuthenticator({
 authenticater.openAuthTab();
 ```
 
-`scopes` tell Shopify what access your app needs.  The default is `"all"`, but a comma separated string like `"read_orders,read_products"` should be given if you know you don't need access to everything.  The supported scopes are:
+`scopes` tell Shopify what access your app needs.  The default is `"all"`, but a comma separated string like `"read_orders,read_products"` should be given to the authenticator if you know you don't need access to everything.  The supported scopes are:
 
 * `"read_content"`
 * `"write_content"`
@@ -78,9 +78,9 @@ authenticater.openAuthTab();
 * `"read_shipping"`
 * `"write_shipping"`
 
-See below for more OAuth options.
+See below for more OAuth options, like if you want to authenticate in an iframe or with your own UI.
 
-```
+```javascript
 // Second-time Public App API access
 
 // On the server or client.
@@ -93,7 +93,7 @@ var = new Shopify({
 ## Client and Server APIs
 While the Server API is synchronous using `Fibers`, the client API is not.  So each method needs an additional callback, with `err` and possible return value.
 
-```
+```javascript
 // Server
 var count = api.countOrders();
 
@@ -106,12 +106,14 @@ api.countOrders(function(err, count) {
 
 Instead of `err`, `Error`s are thrown on the server.
 
+If you want to use the asynchronous API on the server, for example to share code between client and server, use underscored methods, like `api._getOrders`.
+
 ## API Updates
 If the Shopify API changes and something breaks, of course please create an issue.  However, `API.define` and `API.defineConcat` are provided to hold you over.
 
 Just call:
 
-```
+```javascript
 Shopify.API.define({
     "name": "getProductMetafieldByID",
     "method": "GET",
@@ -121,11 +123,13 @@ Shopify.API.define({
 });
 ```
 
-to directly modify `Shopify.API.prototype`, adding the `getProductMetafieldByID` method (sync on server, async on client).  Since `#{id}` is in `path`, it will take a required param `id`.  The optional `returns` indicates that Shopify returns json like `{ "metafield": { ... } }` and `getProductMetafieldByID` should return the `metafield` of that object.
+to directly modify `Shopify.API.prototype`, adding the `getProductMetafieldByID` method (sync on server, async on client), as well as `_getProductMetafieldByID` (async on both).  Since `#{id}` is in `path`, it will take a required param `id`.  The optional `returns` indicates that Shopify returns json like `{ "metafield": { ... } }` and `getProductMetafieldByID` should return the `metafield` of that object.
+
+Sometimes Shopify specifies their API with two of the same params, such as `GET /admin/orders/#{id}/transactions/#{id}.json`.  Be sure to rename one of these, like `GET /admin/orders/#{orderId}/transactions/#{id}.json`.
 
 Defining `getAllXYZ` methods is possible in the same way using:
 
-```
+```javascript
 Shopify.API.defineConcat({
     "name": "getAllOrders",
     "count": "countOrders",
@@ -136,10 +140,15 @@ Shopify.API.defineConcat({
 ## Get All
 The Shopify API limits some calls, like `getOrders` to 250 items.  Get All methods are also defined for such methods in order to automate the work of counting the collection, fetching the pages individually, and then concatenating the results.
 
-```
+```javascript
 var allOpenOrders = api.getAllOrders();
 var allOrders = `pi.getAllOrders({ status: "any" });
 ```
+
+The currently available Get All methods are:
+* `getAllOrders`
+* `getAllProducts`
+* `getAllCollects`
 
 ## Rate Limiting
 This library does its best to not exceed the Shopify rate limit of one call each half second with bursts of up to 40 calls.
@@ -150,7 +159,7 @@ With each reply, Shopify returns a `X-Shopify-Shopify` header like `"32/40"`.  O
 `PublicAppOAuthAuthenticator.openAuthTab` is provided as the simplest way to do OAuth.  However, you can also take control at various steps in the process if you want a more customized experience.
 
 ### Scenario 1: Automatic
-```
+```javascript
      console.assert(Meteor.isClient);
      var authenticator = new Shopfiy.PublicAppOAuthAuthenticator({
          shop: "my-shop-40",
@@ -170,7 +179,7 @@ With each reply, Shopify returns a `X-Shopify-Shopify` header like `"32/40"`.  O
 ```
 
 ### Scenario 2: iframe
-```
+```javascript
      console.assert(Meteor.isClient);
 
      // Let the user install your app in an iframe instead of a new tab.
@@ -205,7 +214,7 @@ With each reply, Shopify returns a `X-Shopify-Shopify` header like `"32/40"`.  O
 ```
 
 ### Scenario 3: direct navigation
-```
+```javascript
      console.assert(Meteor.isClient);
 
      var authenticator = new Shopify.PublicAppOAuthAuthenticator({
