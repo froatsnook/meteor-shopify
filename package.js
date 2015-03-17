@@ -12,7 +12,7 @@ Package.onUse(function(api) {
     api.use("http", ["client", "server"]);
     api.use("underscore", ["client", "server"]);
     api.use("webapp", "server");
-    api.use("froatsnook:sleep", ["client", "server"]);
+    api.use("froatsnook:sleep@1.1.0", ["client", "server"]);
     api.addFiles("lib/01-shopify.js", ["client", "server"]);
     api.addFiles("lib/02-APIMethods.js", ["client", "server"]);
     api.addFiles("lib/api.js", ["client", "server"]);
@@ -28,7 +28,7 @@ Package.onTest(function(api) {
     api.use("tinytest");
     api.use("webapp", "server");
     api.use("tracker");
-    api.use("froatsnook:sleep");
+    api.use("froatsnook:sleep@1.1.0");
     api.use("froatsnook:shopify");
     api.addFiles("test/shopify-api-simulator.js", ["server"]);
     api.addFiles("test/shopify-tests.js");
