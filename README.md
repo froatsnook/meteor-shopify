@@ -22,6 +22,8 @@ var order102420 = api.getOrder({ id: 102420 });
 console.log(order102420); // => { name: "#2022", ... }
 ```
 
+## Note: while the server API is fine, the client API is totally insecure and only works in browsers where you can change the security settings (e.g. CEF).  Stay tuned!
+
 ## Public & Private Apps
 This package supports both Public and Private Apps.
 
