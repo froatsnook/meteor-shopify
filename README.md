@@ -250,6 +250,38 @@ With each reply, Shopify returns a `X-Shopify-Shopify` header like `"32/40"`.  O
 
 ## API
 
+Each function takes an optional parameter, `options`.  See the Shopify API documentation for details on supported options and return types.
+
+Whenever shopify returns an object like:
+
+```json
+{
+    "order": {
+        ...
+    }
+}
+```
+
+the content of `"order"` is returned instead.  This means that:
+
+```javascript
+var count = api.countOrders().count; // WRONG
+var count = api.countOrders(); // OK
+```
+
+Whenever an endpoint has a parameter in the path (e.g. `#{id}`), it ends up as a required option in `options`.  So, for example,
+
+```javascript
+// Shopify.API.getRecurringApplicationCharge
+// => GET /admin/recurring_application_charges/#{id}.json
+
+var charge = api.getRecurringApplicationCharge(); // WRONG
+var charge = api.getRecurringApplicationCharge({ id: 10233 }); // OK
+```
+
+End point list
+--------------
+
 #### `Shopify.API.getPolicies`
 ```
 GET /admin/policies.json
