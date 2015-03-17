@@ -59,6 +59,25 @@ var authenticator = new Shopify.PublicAppOAuthAuthenticator({
 authenticater.openAuthTab();
 ```
 
+`scopes` tell Shopify what access your app needs.  The default is `"all"`, but a comma separated string like `"read_orders,read_products"` should be given if you know you don't need access to everything.  The supported scopes are:
+
+* `"read_content"`
+* `"write_content"`
+* `"read_themes"`
+* `"write_themes"`
+* `"read_products"`
+* `"write_products"`
+* `"read_customers"`
+* `"write_customers"`
+* `"read_orders"`
+* `"write_orders"`
+* `"read_script_tags"`
+* `"write_script_tags"`
+* `"read_fulfillments"`
+* `"write_fulfillments"`
+* `"read_shipping"`
+* `"write_shipping"`
+
 See below for more OAuth options.
 
 ```
