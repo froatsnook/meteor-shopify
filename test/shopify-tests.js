@@ -394,6 +394,22 @@ if (Meteor.isServer) {
         runTest(new Date(), "does throw");
     });
 
+    Tinytest.add("misc - No duplicate API Methods", function(test) {
+        var lookup = { };
+        Shopify._APIMethods.forEach(function(info) {
+            test.equal(typeof lookup[info.name], "undefined");
+            lookup[info.name] = true;
+        });
+    });
+
+    Tinytest.add("misc - No duplicate API Concat Methods", function(test) {
+        var lookup = { };
+        Shopify._APIConcatMethods.forEach(function(info) {
+            test.equal(typeof lookup[info.name], "undefined");
+            lookup[info.name] = true;
+        });
+    });
+
 } else if (Meteor.isClient) {
 
 }
