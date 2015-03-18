@@ -32,11 +32,29 @@ var newAPI = function(options) {
     options.access_token = options.access_token || "yes";
     options.shop = options.shop || Meteor.uuid();
 
-    var api = new Shopify.API(options);
-    api._HOST_OVERRIDE = "http://localhost:10494";
-    api.additionalHeaders["X-SHOP"] = options.shop;
+    options.additionalHeaders = { "X-SHOP": options.shop };
+    options._HOST_OVERRIDE = "http://localhost:10494";
 
-    return api;
+    return new Shopify.API(options);
+};
+
+var newClientAPI = function(options) {
+    if (!options) {
+        options = { };
+    }
+
+    options.access_token = options.access_token || "yes";
+    options.shop = options.shop || Meteor.uuid();
+
+    // Set insecure to true if not given.
+    if (typeof options.insecure === "undefined") {
+        options.insecure = true;
+    }
+
+    options.additionalHeaders = { "X-SHOP": options.shop };
+    options._HOST_OVERRIDE = "http://localhost:10494";
+
+    return new Shopify.API(options);
 };
 
 if (Meteor.isServer) {
@@ -410,7 +428,92 @@ if (Meteor.isServer) {
         });
     });
 
+    Tinytest.add("keyset - require name", function(test) {
+        test.throws(function() {
+            Shopify.addKeyset("", { access_token: "test" });
+        });
+    });
+
+    Tinytest.add("keyset - require auth", function(test) {
+        test.throws(function() {
+            Shopify.addKeyset("test");
+        });
+    });
+
+    Tinytest.add("keyset - require stuff in auth", function(test) {
+        test.throws(function() {
+            Shopify.addKeyset("test", { });
+        });
+    });
+
+    Tinytest.add("keyset - store api_key+password", function(test) {
+        Shopify.addKeyset("test1", {
+            api_key: "apikey",
+            password: "pw"
+        });
+
+        test.equal(Shopify._keysets.test1.type, "private");
+        test.equal(Shopify._keysets.test1.api_key, "apikey");
+        test.equal(Shopify._keysets.test1.password, "pw");
+    });
+
+    Tinytest.add("keyset - store api_key+secret", function(test) {
+        Shopify.addKeyset("test2", {
+            api_key: "apikey",
+            secret: "shh"
+        });
+
+        test.equal(Shopify._keysets.test2.type, "oauth");
+        test.equal(Shopify._keysets.test2.api_key, "apikey");
+        test.equal(Shopify._keysets.test2.secret, "shh");
+    });
+
+    Tinytest.add("keyset - store access_token", function(test) {
+        Shopify.addKeyset("test3", {
+            access_token: "AT",
+        });
+
+        test.equal(Shopify._keysets.test3.type, "public");
+        test.equal(Shopify._keysets.test3.access_token, "AT");
+    });
+
+    Tinytest.add("keyset - replace", function(test) {
+        Shopify.addKeyset("test4", {
+            access_token: "AT 1",
+        });
+
+        Shopify.addKeyset("test4", {
+            api_key: "test key",
+            secret: "test secret"
+        });
+
+        test.equal(Shopify._keysets.test4.type, "oauth");
+        test.equal(Shopify._keysets.test4.api_key, "test key");
+        test.equal(Shopify._keysets.test4.secret, "test secret");
+    });
+
 } else if (Meteor.isClient) {
 
+    Tinytest.addAsync("client - countOrders", function(test, done) {
+        var api = newClientAPI();
+        api.countOrders(function(err, count) {
+            test.isTrue(!err);
+            test.equal(count, 1000);
+            done();
+        });
+    });
+
+    Tinytest.addAsync("client - getAllOrders", function(test, done) {
+        var api = newClientAPI();
+
+        api.getAllOrders({
+            status: "any",
+            created_at_min: new Date(5*1000*60)
+        }, function(err, orders) {
+            test.isTrue(!err);
+            test.equal(orders.length, 998);
+            done();
+        });
+    });
 }
 
