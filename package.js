@@ -19,6 +19,8 @@ Package.onUse(function(api) {
     api.addFiles("lib/Authenticators.js", ["client", "server"]);
     api.addFiles("lib/AuthRedirect.js", "server");
     api.addFiles("lib/DefaultScopes.js", ["client", "server"]);
+    api.addFiles("lib/Keyset.js", ["server"]);
+    api.addFiles("lib/ProxyAPICache.js", ["server"]);
     api.export("Shopify", ["client", "server"]);
 });
 
