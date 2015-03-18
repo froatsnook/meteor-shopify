@@ -343,7 +343,7 @@ if (Meteor.isServer) {
         var api = newAPI({ shop: "rate-limit-shop" });
 
         // Start backing off faster than normal for testing rate limiting.
-        api.backoff = 10;
+        api.config.backoff = 10;
 
         // First hit the backoff limit.
         var start = Date.now();

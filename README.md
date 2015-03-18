@@ -155,7 +155,7 @@ The currently available Get All methods are:
 ## Rate Limiting
 This library does its best to not exceed the Shopify rate limit of one call each half second with bursts of up to 40 calls.
 
-With each reply, Shopify returns a `X-Shopify-Shopify` header like `"32/40"`.  Once this reaches the `api.backoff` (default `35`), API calls will be queued and fired each half second until again below the backoff limit.
+With each reply, Shopify returns a `X-Shopify-Shopify` header like `"32/40"`.  Once this reaches the `api.config.backoff` (default `35`), API calls will be queued and fired each half second until again below the backoff limit.
 
 ## Custom OAuth
 `PublicAppOAuthAuthenticator.openAuthTab` is provided as the simplest way to do OAuth.  However, you can also take control at various steps in the process if you want a more customized experience.
