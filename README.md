@@ -289,8 +289,7 @@ var charge = api.getRecurringApplicationCharge(); // WRONG
 var charge = api.getRecurringApplicationCharge({ id: 10233 }); // OK
 ```
 
-End point list
---------------
+### End point list
 
 #### `Shopify.API.getPolicies`
 ```
