@@ -22,8 +22,6 @@ var order102420 = api.getOrder({ id: 102420 });
 console.log(order102420); // => { name: "#2022", ... }
 ```
 
-## Note: while the server API is fine, the client API is totally insecure and only works in browsers where you can change the security settings (e.g. CEF).  Stay tuned!
-
 ## Public & Private Apps
 This package supports both Public and Private Apps.
 
@@ -31,7 +29,7 @@ This package supports both Public and Private Apps.
 If you just want to access your own shop's data, then it's easiest to make a Private App.  Login to your Shopify Partner account and create it, and take note of your `api_key` and `password`.
 
 ```javascript
-// Private App API access
+// Private App API access (server)
 ShopifyAPI = new Shopify.API({
     shop: "your-shop",
     api_key: "Your API Key",
@@ -45,12 +43,21 @@ If you need to access multiple shops, then you need a Public App.  The first tim
 ```javascript
 // First-time Public App API access
 
-// On the client.
+// On the server (since you don't want to expose your secret to the client)
+Shopify.addKeyset("default", {
+    api_key: "Your API Key",
+    secret: "Your API Shared Secret",
+});
+
+// On the client
 var authenticator = new Shopify.PublicAppOAuthAuthenticator({
     shop: "your-shop",
     api_key: "Your API Key",
-    secret: "Your API Shared Secret",
+    keyset: "default",
     scopes: "all",
+
+    // Once the login succeeds and a permanent access token is acquired, store
+    // it in the user's profile for future use.
     onAuth: function(accessToken) {
         Meteor.users.update(Meteor.userId(), {
             $set: { "profile.shopifyAccessToken": access_token }
@@ -61,7 +68,7 @@ var authenticator = new Shopify.PublicAppOAuthAuthenticator({
 authenticater.openAuthTab();
 ```
 
-`scopes` tell Shopify what access your app needs.  The default is `"all"`, but a comma separated string like `"read_orders,read_products"` should be given to the authenticator if you know you don't need access to everything.  The supported scopes are:
+`scopes` (Public Apps only) tell Shopify what access your app needs.  The user will be prompted to grant access to the scopes your App requests when he/she navigates to `authURL`.  The default is `"all"`, but a comma separated string like `"read_orders,read_products"` should be given to the authenticator if you know you don't need access to everything.  The supported scopes are:
 
 * `"read_content"`
 * `"write_content"`
@@ -92,6 +99,50 @@ var = new Shopify({
 });
 ```
 
+You can also use a keyset if you don't want the client to see the `access_token`.
+
+### Keysets
+You don't want to expose your `secret` (Public Apps), or `password` (Private Apps) to the client.  Therefore, use a `keyset` instead.
+
+```javascript
+// Server
+Meteor.startup(function() {
+    // For Public Apps
+    Shopify.addKeyset("default", {
+        api_key: "Your API Key",
+        secret: "Your API Shared Secret"
+    });
+
+    // Or for Private Apps
+    Shopify.addKeyset("default", {
+        api_key: "Your API Key",
+        password: "Your API Password"
+    });
+
+    // Or for Public Apps when the user has logged in
+    Shopify.addKeyset("default", {
+        access_token: "This shop's OAuth permanent access token"
+    });
+});
+
+// Client (or Server)
+var api = new Shopify.API({
+    shop: "your-store",
+    keyset: "default"
+});
+```
+
+You can also delete a keyset when you're done with it:
+```javascript
+// Server
+Shopify.removeKeyset("default");
+```
+
+### Insecure Client
+If you are control of the browser environment, you can pass your `api_key` and `password/secret` in `options`, ignoring `options.keyset`.  Be sure to set `options.insecure` to `true`, and use underscored method names like `API._getOrders` in order to make the calls via AJAX.
+
+If you call non-underscored methods, like `API.getOrders` on the client, requests will be proxied through the server using the Meteor Method `"__ShopifyCall"`.
+
 ## Client and Server APIs
 While the Server API is synchronous using `Fibers`, the client API is not.  So each method needs an additional callback, with `err` and possible return value.
 
@@ -108,7 +159,7 @@ api.countOrders(function(err, count) {
 
 Instead of `err`, `Error`s are thrown on the server.
 
-If you want to use the asynchronous API on the server, for example to share code between client and server, use underscored methods, like `api._getOrders`.
+If you want to use the asynchronous API on the server, for example to share code between (an insecure) client and server, use underscored methods, like `api._getOrders`.
 
 ## API Updates
 If the Shopify API changes and something breaks, of course please create an issue.  However, `API.define` and `API.defineConcat` are provided to hold you over.
@@ -140,7 +191,7 @@ Shopify.API.defineConcat({
 ```
 
 ## Get All
-The Shopify API limits some calls, like `getOrders` to 250 items.  Get All methods are also defined for such methods in order to automate the work of counting the collection, fetching the pages individually, and then concatenating the results.
+The Shopify API limits some calls, such as `getOrders`, to 250 items.  Get All methods are also defined for such methods in order to automate the work of counting the collection, fetching the pages individually, and then concatenating the results.
 
 ```javascript
 var allOpenOrders = api.getAllOrders();
@@ -160,13 +211,22 @@ With each reply, Shopify returns a `X-Shopify-Shopify` header like `"32/40"`.  O
 ## Custom OAuth
 `PublicAppOAuthAuthenticator.openAuthTab` is provided as the simplest way to do OAuth.  However, you can also take control at various steps in the process if you want a more customized experience.
 
+### All scenarios
+```javascript
+// On the server (since you don't want clients to know your API Shared Secret).
+Shopify.addKeyset("default", {
+    api_key: "Your Shopify App's API Key",
+    secret: "Your Shopify App's API Shared Secret"
+});
+```
+
 ### Scenario 1: Automatic
 ```javascript
      console.assert(Meteor.isClient);
      var authenticator = new Shopfiy.PublicAppOAuthAuthenticator({
          shop: "my-shop-40",
          api_key: "Your Shopify App's API Key",
-         secret: "Your Shopify App's Shared Secret",
+         keyset: "default",
          scopes: "read_products,read_customers",
          onAuth: function(access_token) {
              Meteor.call("SaveShopifyCredentials", access_token);
@@ -191,7 +251,7 @@ With each reply, Shopify returns a `X-Shopify-Shopify` header like `"32/40"`.  O
      var authenticator = new Shopify.PublicAppOAuthAuthenticator({
          shop: "my-shop-40",
          api_key: "Your Shopify App's API Key",
-         secret: "Your Shopify App's Shared Secret",
+         keyset: "default",
          scopes: "read_products,read_customers",
 
          // Navigate iframe to a success message after authentication
@@ -222,7 +282,7 @@ With each reply, Shopify returns a `X-Shopify-Shopify` header like `"32/40"`.  O
      var authenticator = new Shopify.PublicAppOAuthAuthenticator({
          shop: "my-shop-40",
          api_key: "Your Shopify App's API Key",
-         secret: "Your Shopify App's Shared Secret",
+         keyset: "default",
          scopes: "read_products,read_customers",
 
          // Logging in will redirect here.
@@ -260,7 +320,55 @@ This starts a Shopify API Simulator and runs tests, which can be checked at `htt
 
 ## API
 
-Each function takes an optional parameter, `options`.  See the Shopify API documentation for details on supported options and return types.
+### Shopify.API constructor
+
+Shopify API access objects can be created with `new Shopify.API`:
+
+```javascript
+var api = new Shopify.API({
+    shop: "test-shop-10",
+    backoff: 38,
+    insecure: true,
+    additionalHeaders: { "X-DEV-MOOD": "Pensive" }
+});
+```
+
+The available options are:
+
+* `options.shop {String}` The target shop name, like `"my-store"` in `"my-store.my-shopify.com"`.
+* `[options.keyset] {String}` Name of keyset (which must be registered on the server via `Shopify.addKeyset`).  A keyset can be used instead of providing `api_key+password` or `api_key+secret` or `access_token`.
+* `[options.api_key] {String}` Your App's API Key (Public and Private Apps).  This can be provided on the server (instead of a keyset), and on the client if `options.insecure` is `true`.
+* `[options.password] {String}` Your App's API Password (Private Apps only).  This can be provided on the server (instead of a keyset), and on the client if `options.insecure` is `true`.
+* `[options.secret] {String}` Your App's API Shared Secret (Public Apps only).  This can be provided on the server (instead of a keyset), and on the client if `options.insecure` is `true`.
+* `[options.access_token] {String}` This shop's permanent access token acquired via OAuth2.  This can be provided on the server (instead of a keyset), and on the client if `options.insecure` is `true`.
+* `[options.backoff] {Number}` (default=`35`) The number of requests in Shopify's call bucket before requests are enqueued and fired off every half second.
+* `[options.insecure] {Boolean}` (default=`false`) If `true`, then various security assertions and warnings will be ignored.
+* `[options.additionalHeaders]` {Object} (default=`{ }`) Headers here will be sent with each call to Shopify (mainly for testing).
+
+### Shopify Endpoint functions
+
+```javascript
+// Server
+var count = api.countOrders(options);
+
+// Client
+api.countOrders(options, function(err, count) {
+    ...
+});
+
+```
+
+Each such function takes an optional parameter, `options`.  See the Shopify API documentation for details on supported options and return types.
+
+Whenever an endpoint has a parameter in the path (e.g. `#{id}`), it ends up as a required option in `options`.  So, for example,
+
+```javascript
+// Shopify.API.getRecurringApplicationCharge
+// => GET /admin/recurring_application_charges/#{id}.json
+
+var charge = api.getRecurringApplicationCharge(); // WRONG
+var charge = api.getRecurringApplicationCharge({ id: 10233 }); // OK
+```
 
 Whenever shopify returns an object like:
 
@@ -279,17 +387,7 @@ var count = api.countOrders().count; // WRONG
 var count = api.countOrders(); // OK
 ```
 
-Whenever an endpoint has a parameter in the path (e.g. `#{id}`), it ends up as a required option in `options`.  So, for example,
-
-```javascript
-// Shopify.API.getRecurringApplicationCharge
-// => GET /admin/recurring_application_charges/#{id}.json
-
-var charge = api.getRecurringApplicationCharge(); // WRONG
-var charge = api.getRecurringApplicationCharge({ id: 10233 }); // OK
-```
-
-### End point list
+### Endpoint list
 
 #### `Shopify.API.getPolicies`
 ```
