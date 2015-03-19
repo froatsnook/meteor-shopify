@@ -141,7 +141,7 @@ Shopify.removeKeyset("default");
 ### Insecure Client
 If you are control of the browser environment, you can pass your `api_key` and `password/secret` in `options`, ignoring `options.keyset`.  Be sure to set `options.insecure` to `true`, and use underscored method names like `API._getOrders` in order to make the calls via AJAX.
 
-If you call non-underscored methods, like `API.getOrders` on the client, requests will be proxied through the server using the Meteor Method `"__ShopifyCall"`.
+If you call non-underscored methods, like `API.getOrders` on the client, requests will be proxied through the server using the Meteor Method `"froatsnook:shopify/call"`.
 
 ## Client and Server APIs
 While the Server API is synchronous using `Fibers`, the client API is not.  So each method needs an additional callback, with `err` and possible return value.
