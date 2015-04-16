@@ -1,0 +1,32 @@
+{
+    "globals": {
+        "$": false,
+        "_": false,
+        "Buffer": false,
+        "HTTP": false,
+        "Meteor": false,
+        "Npm": false,
+        "Shopify": true,
+        "WebApp": false,
+        "document": false,
+        "check": false,
+        "console": false,
+        "window": false
+    },
+    "rules": {
+        // I use var names like _example to indicate private API
+        "no-underscore-dangle": 0,
+
+        // Don't care about global "use strict" because meteor wraps files
+        // with functions anyway
+        "global-strict": 0,
+
+        "indent": [2, 4],
+
+        // Shopify API identifiers are not_camelcase
+        "camelcase": 0,
+
+        // When API.config.debug is true, logging happens
+        "no-console": 0
+    }
+}
