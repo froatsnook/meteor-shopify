@@ -344,6 +344,7 @@ The available options are:
 * `[options.backoff] {Number}` (default=`35`) The number of requests in Shopify's call bucket before requests are enqueued and fired off every half second.
 * `[options.insecure] {Boolean}` (default=`false`) If `true`, then various security assertions and warnings will be ignored.
 * `[options.additionalHeaders]` {Object} (default=`{ }`) Headers here will be sent with each call to Shopify (mainly for testing).
+* `[options.debug]` {Boolean} (default=`false`) If `true`, then some messages will be logged with `console.log`.
 
 ### Shopify Endpoint functions
 
