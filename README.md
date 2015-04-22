@@ -195,7 +195,7 @@ The Shopify API limits some calls, such as `getOrders`, to 250 items.  Get All m
 
 ```javascript
 var allOpenOrders = api.getAllOrders();
-var allOrders = `pi.getAllOrders({ status: "any" });
+var allOrders = api.getAllOrders({ status: "any" });
 ```
 
 The currently available Get All methods are:
