@@ -202,6 +202,7 @@ The currently available Get All methods are:
 * `getAllOrders`
 * `getAllProducts`
 * `getAllCollects`
+* `getAllCustomers`
 
 ## Rate Limiting
 This library does its best to not exceed the Shopify rate limit of one call each half second with bursts of up to 40 calls.
