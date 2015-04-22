@@ -362,6 +362,13 @@ api.countOrders(options, function(err, count) {
 
 Each such function takes an optional parameter, `options`.  See the Shopify API documentation for details on supported options and return types.
 
+Many Shopify API options are date strings.  If you provide a Javascript `Date` object, then it will be automatically formatted to match Shopify's expected date format, `"YYYY-MM-DD HH:mm:ss"`.
+
+```javascript
+// Get all customers created or changed in the past 24 hours.
+Shopify.getAllCustomers({ updated_at_min: new Date(Date.now() - 24*60*60*1000) });
+```
+
 Whenever an endpoint has a parameter in the path (e.g. `#{id}`), it ends up as a required option in `options`.  So, for example,
 
 ```javascript
