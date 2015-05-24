@@ -143,6 +143,41 @@ If you are control of the browser environment, you can pass your `api_key` and `
 
 If you call non-underscored methods, like `API.getOrders` on the client, requests will be proxied through the server using the Meteor Method `"froatsnook:shopify/call"`.
 
+## Embedded App SDK
+Version 1.3.0 adds experimental Embedded App SDK support.  The current workflow is:
+
+* Set `embedded_app_sdk` to `true` in your `Shopify.PublicAppOAuthAuthenticator`
+* Call `Shopify.getEmbeddedAppAPI` to load Shopify's `ShopifyApp` object
+* Initialize it by providing an api key and the store's domain
+* Do your thing
+
+See an example [here](examples/EmbeddedAppSDKTest).
+
+If you have problems, questions, or suggestions, please make an issue on github.
+
+### Shopify.getEmbeddedAppAPI
+
+This function should be called on the client from within the iframe which is
+embedded in the store in order to retrieve the Embedded App SDK `ShopifyApp`
+object.  You can use this object to show messages and do other Embedded App SDK
+stuff.
+
+```javascript
+Shopify.getEmbeddedAppAPI(function(err, ShopifyApp) {
+    if (err) {
+        toastr.error("Failed to load ShopifyApp");
+        return;
+    }
+
+    ShopifyApp.init({
+        apiKey: "...",
+        shopOrigin: "https://" + shop + ".myshopify.com"
+    });
+
+    ShopifyApp.flashNotice("It works");
+});
+```
+
 ## Client and Server APIs
 While the Server API is synchronous using `Fibers`, the client API is not.  So each method needs an additional callback, with `err` and possible return value.
 
