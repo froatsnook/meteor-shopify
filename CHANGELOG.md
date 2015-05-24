@@ -1,3 +1,7 @@
+1.3.0 - 2015-05-24
+==================
+* Add experimental Embedded App SDK support
+
 1.2.0 - 2015-04-22
 ==================
 * Add `getAllCustomers`
