@@ -1,3 +1,7 @@
+1.3.1 - 2015-05-26
+==================
+* Improve embedded app SDK example
+
 1.3.0 - 2015-05-24
 ==================
 * Add experimental Embedded App SDK support
