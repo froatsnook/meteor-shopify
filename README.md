@@ -153,6 +153,8 @@ Version 1.3.0 adds experimental Embedded App SDK support.  The current workflow 
 
 See an example [here](examples/EmbeddedAppSDKTest).
 
+For a list of `ShopifyApp` methods, see Shopify's documentation [here](https://docs.shopify.com/embedded-app-sdk/methods).
+
 If you have problems, questions, or suggestions, please make an issue on github.
 
 ### Shopify.getEmbeddedAppAPI
