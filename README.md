@@ -93,7 +93,7 @@ See below for more OAuth options, like if you want to authenticate in an iframe 
 // Second-time Public App API access
 
 // On the server or client.
-var = new Shopify({
+var = new Shopify.API({
     shop: "your-shop",
     access_token: "Your access token"
 });
