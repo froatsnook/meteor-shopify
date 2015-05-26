@@ -31,7 +31,10 @@ Template.home.events({
                 shop: shop,
                 api_key: api_key,
                 keyset: "default",
-                embedded_app_sdk: true
+                embedded_app_sdk: true,
+                onAuth: function(access_token) {
+                    localStorage.access_token = access_token;
+                },
             });
 
             // Start authenticating.
