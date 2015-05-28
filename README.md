@@ -115,6 +115,18 @@ var authenticator = new Shopify.PublicAppOAuthAuthenticator({
 
 ```
 
+Instead you can save `access_token` and create a keyset using a global `onAuth` handler:
+
+```javascript
+Shopify.onAuth(function(access_token, authenticatorConfig, userId) {
+    ShopifyCredentials.upsert(userId, {
+        shop: authenticatorConfig.shop,
+        api_key: authenticatorConfig.api_key,
+        access_token: access_token,
+    });
+});
+```
+
 ### Keysets
 You don't want to expose your `secret` (Public Apps), or `password` (Private Apps) to the client.  Therefore, use a `keyset` instead.
 
