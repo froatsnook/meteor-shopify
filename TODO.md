@@ -7,5 +7,7 @@
 * Store API rate limit info and request queue (or at least count) in a global object which times out when the timers are done
 * EASDK documentation
 * Better EASDK integration
-* Figure out whether insecure is necessary for anything but private apps
+* Figure out when insecure makes sense
+  + It's clear that clients shouldn't ever see `secret`, but what about `access_token`?
+  + In order to preserve backwards compatibility, could add `Shopify.harden()` which would remove the `access_token` parameter in `onAuth`.  Could then add some server-side onAuth for saving credentials.
 
