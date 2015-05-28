@@ -99,7 +99,21 @@ var = new Shopify.API({
 });
 ```
 
-You can also use a keyset if you don't want the client to see the `access_token`.
+You can also use a keyset if you don't want the client to see the `access_token`.  In this case, be sure to call `Shopify.harden()` so that the client will not receive `access_token` as an `onAuth` parameter in `PublicAppOAuthAuthenticator`.
+
+```javascript
+// On the server
+Shopify.harden();
+
+// On the client
+var authenticator = new Shopify.PublicAppOAuthAuthenticator({
+    ...
+    onAuth: function(err, access_token) {
+        console.assert(typeof access_token === "undefined");
+    },
+});
+
+```
 
 ### Keysets
 You don't want to expose your `secret` (Public Apps), or `password` (Private Apps) to the client.  Therefore, use a `keyset` instead.
