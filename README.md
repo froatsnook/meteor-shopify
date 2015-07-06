@@ -399,6 +399,22 @@ api.countOrders(options, function(err, count) {
 
 Each such function takes an optional parameter, `options`.  See the Shopify API documentation for details on supported options and return types.
 
+For requests that require a request body, such as [`POST /admin/metafields.json`](https://docs.shopify.com/api/metafield#create), you can specify the `content` or `data` properties.  `content` is an arbitrary string, whereas `data` is an object (converted to JSON).
+
+```javascript
+var res = api.createMetafield({
+    data: {
+        metafield: {
+            namespace: "inventory",
+            key: "warehouse",
+            value: 25,
+            value_type: "integer",
+        }
+    },
+});
+
+```
+
 Many Shopify API options are date strings.  If you provide a Javascript `Date` object, then it will be automatically formatted to match Shopify's expected date format, `"YYYY-MM-DD HH:mm:ss"`.
 
 ```javascript
