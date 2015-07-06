@@ -5,14 +5,25 @@
 // input the `secret` on the client in this test app, a meteor method does the
 // trick.
 Meteor.methods({
-    "AddKeyset": function(keyset, api_key, secret) {
-        check(keyset, String);
-        check(api_key, String);
-        check(secret, String);
+    "AddKeyset": function(options) {
+        check(options, Object);
+        check(options.keyset, String);
 
-        Shopify.addKeyset(keyset, {
-            api_key: api_key,
-            secret: secret
-        });
-    }
+        // Either require access_token or api_key+secret
+        if (options.access_token) {
+            check(options.access_token, String);
+
+            Shopify.addKeyset(options.keyset, {
+                access_token: options.access_token,
+            });
+        } else {
+            check(options.api_key, String);
+            check(options.secret, String);
+
+            Shopify.addKeyset(options.keyset, {
+                api_key: options.api_key,
+                secret: options.secret,
+            });
+        }
+    },
 });

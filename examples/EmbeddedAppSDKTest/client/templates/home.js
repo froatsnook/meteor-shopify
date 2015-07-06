@@ -22,18 +22,27 @@ Template.home.events({
         // NOTE: normally the client should never see the secret, which is why
         // Shopify.addKeyset is used.  See server/lib/AddKeyset.js and
         // froatsnook:shopify's README for more info.
-        Meteor.call("AddKeyset", "default", api_key, secret, function(err) {
+        Meteor.call("AddKeyset", {
+            keyset: "default",
+            api_key: api_key,
+            secret: secret,
+        }, function(err) {
             if (err) {
                 toastr.error(err, "Failed to create keyset");
             }
 
+            // Prepare to authenticate
             var authenticator = new Shopify.PublicAppOAuthAuthenticator({
                 shop: shop,
                 api_key: api_key,
                 keyset: "default",
                 embedded_app_sdk: true,
+
+                // This is called after successful authentication.
                 onAuth: function(access_token) {
                     localStorage.access_token = access_token;
+
+                    toastr.success("Successfully authenticated");
                 },
             });
 
