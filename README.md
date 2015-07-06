@@ -1739,5 +1739,5 @@ DELETE /admin/products/#{productId}/images/#{id}.json
 Remove a Product Image from the database
 
 ## License
-MIT
+[MIT](https://tldrlegal.com/license/mit-license)
 
