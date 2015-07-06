@@ -1,6 +1,6 @@
 Package.describe({
     name: "froatsnook:shopify",
-    version: "1.3.1",
+    version: "1.4.0",
     summary: "Shopify API Access",
     git: "https://github.com/froatsnook/meteor-shopify",
     documentation: "README.md"
