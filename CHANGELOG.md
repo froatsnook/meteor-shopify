@@ -1,3 +1,10 @@
+1.4.0 - 2015-07-06
+==================
+* Fix `addKeyset` so that providing `access_token` "overrules" other options
+* Further improvements to embedded app SDK example
+* Fix automatic Authenticator creation when keyset given as option in `new Shopify.API`
+* Fix POST requests when there's a request body
+
 1.3.1 - 2015-05-26
 ==================
 * Improve embedded app SDK example
