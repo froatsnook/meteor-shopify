@@ -704,6 +704,18 @@ app.post("/admin/orders/:id/open.json", function(req, res) {
     res.send({ });
 });
 
+app.post("/admin/metafields.json", function(req, res) {
+    var body = "";
+    req.on("data", function(text) {
+        body += text.toString("utf-8");
+    });
+
+    req.on("end", function(err) {
+        res.status(201);
+        res.send(JSON.parse(body));
+    });
+});
+
 var filterProducts = function(filters) {
     var matching = products;
 

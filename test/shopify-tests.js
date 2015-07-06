@@ -357,6 +357,23 @@ if (Meteor.isServer) {
         test.equal(orders.length, 450);
     });
 
+    Tinytest.add("POST - createMetafield", function(test) {
+        var api = newAPI();
+
+        var res = api.createMetafield({
+            data: {
+                "metafield": {
+                    "namespace": "inventory",
+                    "key": "warehouse",
+                    "value": 25,
+                    "value_type": "integer"
+                }
+            },
+        });
+
+        test.equal(res.namespace, "inventory");
+    });
+
     Tinytest.add("rate limiting - ensure wait", function(test) {
         var api = newAPI({ shop: "rate-limit-shop" });
 
