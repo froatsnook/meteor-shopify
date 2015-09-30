@@ -149,6 +149,7 @@ Version 1.3.0 adds experimental Embedded App SDK support.  The current workflow 
 * Set `embedded_app_sdk` to `true` in your `Shopify.PublicAppOAuthAuthenticator`
 * Call `Shopify.getEmbeddedAppAPI` to load Shopify's `ShopifyApp` object
 * Initialize it by providing an api key and the store's domain
+* Make sure you've enabled embedded settings in your partner account (Apps -> Your App -> Edit app settings -> Embedded settings)
 * Make sure the `redirect_uri` you're using (defaults to `Meteor.absoluteUrl("/__shopify-auth")`) is set in your partner account (Apps -> Your App -> Edit app settings -> Redirection URL)
 * Do your thing
 
