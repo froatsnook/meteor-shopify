@@ -38,7 +38,7 @@ ShopifyAPI = new Shopify.API({
 ```
 
 ### Public Apps
-If you need to access multiple shops, then you need a Public App.  The first time a user uses your app, they will need to authenticate with OAuth 2.  But the access code returned from Shopify can be turned into a permanent `access_token`.  Login to your Shopify Partner account and create your Public App, and take note of your `api_key` and `secret`.
+If you need to access multiple shops, then you need a Public App.  The first time a user uses your app, they will need to authenticate with OAuth 2.  But the access code returned from Shopify can be turned into a permanent `access_token`.  Login to your Shopify Partner account and create your Public App, and take note of your `api_key` and `secret`.  You will also need to whitelist whichever `redirect_uri` you choose to use (App -> Your App -> Edit app settings -> Redirect URL).  If you use the `Shopify.PublicAppOAuthAuthenticator`, then whitelist `localhost:3000/__shopify-auth` (with 2 underscores).  And be sure to replace the `localhost:3000` when you go into production!
 
 ```javascript
 // First-time Public App API access
@@ -149,6 +149,7 @@ Version 1.3.0 adds experimental Embedded App SDK support.  The current workflow 
 * Set `embedded_app_sdk` to `true` in your `Shopify.PublicAppOAuthAuthenticator`
 * Call `Shopify.getEmbeddedAppAPI` to load Shopify's `ShopifyApp` object
 * Initialize it by providing an api key and the store's domain
+* Make sure the `redirect_uri` you're using (defaults to `Meteor.absoluteUrl("/__shopify-auth")`) is set in your partner account (Apps -> Your App -> Edit app settings -> Redirection URL)
 * Do your thing
 
 See an example [here](examples/EmbeddedAppSDKTest).
@@ -248,6 +249,8 @@ With each reply, Shopify returns a `X-Shopify-Shopify` header like `"32/40"`.  O
 
 ## Custom OAuth
 `PublicAppOAuthAuthenticator.openAuthTab` is provided as the simplest way to do OAuth.  However, you can also take control at various steps in the process if you want a more customized experience.
+
+For new apps, you will need to whitelist the `redirect_uri` you're using.  This defaults to `Meteor.absoluteUrl("/__shopify-auth")` if you're using the `Shopify.PublicAppOAuthAuthenticator`.  The setting can be found in your partner account (Apps -> Your App -> Edit app settings -> Redirection URL).
 
 ### All scenarios
 ```javascript
