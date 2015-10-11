@@ -1,3 +1,7 @@
+1.4.2 - 2015-10-11
+==================
+* Fix auth
+
 1.4.0 - 2015-07-06
 ==================
 * Fix `addKeyset` so that providing `access_token` "overrules" other options
