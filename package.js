@@ -29,6 +29,7 @@ Package.onTest(function(api) {
 
     api.use("tinytest");
     api.use("webapp", "server");
+    api.use("check");
     api.use("tracker");
     api.use("froatsnook:sleep@1.1.0");
     api.use("froatsnook:shopify");
