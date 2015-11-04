@@ -1,3 +1,7 @@
+1.4.3 - 2015-11-04
+==================
+* Another auth fix, this time thanks to [sum1youno](https://github.com/sum1youno)
+
 1.4.2 - 2015-10-11
 ==================
 * Fix auth
