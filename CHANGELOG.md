@@ -1,3 +1,7 @@
+1.4.4 - 2015-11-04
+==================
+* Fix `_ undefined` error in getAllCustomers and friends.
+
 1.4.3 - 2015-11-04
 ==================
 * Another auth fix, this time thanks to [sum1youno](https://github.com/sum1youno)
