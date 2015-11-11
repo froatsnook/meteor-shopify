@@ -164,6 +164,12 @@ You can also delete a keyset when you're done with it:
 Shopify.removeKeyset("default");
 ```
 
+And you can check if a keyset exists by name:
+```javascript
+// Server
+Shopify.keysetExists(shopName); // => true or false
+```
+
 ### Insecure Client
 If you are control of the browser environment, you can pass your `api_key` and `password/secret` in `options`, ignoring `options.keyset`.  Be sure to set `options.insecure` to `true`, and use underscored method names like `API._getOrders` in order to make the calls via AJAX.
 
