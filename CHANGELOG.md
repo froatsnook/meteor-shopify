@@ -1,5 +1,7 @@
 1.5.0 - 2015-11-11
 ==================
+* Add server-side `Shopify.onAuth`
+* Add `Shopify.harden()` to prevent leaking `access_token` to client
 * Add `Shopify.keysetExists`
 
 1.3.1 - 2015-05-26
