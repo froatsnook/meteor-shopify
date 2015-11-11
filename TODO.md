@@ -10,4 +10,5 @@
 * Figure out when insecure makes sense
   + It's clear that clients shouldn't ever see `secret`, but what about `access_token`?
   + In order to preserve backwards compatibility, could add `Shopify.harden()` which would remove the `access_token` parameter in `onAuth`.  Could then add some server-side onAuth for saving credentials.
+* Add `Shopify.harden` and `Shopify.onAuth` tests
 

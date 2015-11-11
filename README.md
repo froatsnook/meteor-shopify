@@ -99,7 +99,33 @@ var = new Shopify.API({
 });
 ```
 
-You can also use a keyset if you don't want the client to see the `access_token`.
+You can also use a keyset if you don't want the client to see the `access_token`.  In this case, be sure to call `Shopify.harden()` so that the client will not receive `access_token` as an `onAuth` parameter in `PublicAppOAuthAuthenticator`.
+
+```javascript
+// On the server, e.g. server/init.js
+Shopify.harden();
+
+// On the client
+var authenticator = new Shopify.PublicAppOAuthAuthenticator({
+    ...
+    onAuth: function(err, access_token) {
+        console.assert(typeof access_token === "undefined");
+    },
+});
+
+```
+
+Instead you can save `access_token` and create a keyset using a global `onAuth` handler:
+
+```javascript
+Shopify.onAuth(function(access_token, authenticatorConfig, userId) {
+    ShopifyCredentials.upsert(userId, {
+        shop: authenticatorConfig.shop,
+        api_key: authenticatorConfig.api_key,
+        access_token: access_token,
+    });
+});
+```
 
 ### Keysets
 You don't want to expose your `secret` (Public Apps), or `password` (Private Apps) to the client.  Therefore, use a `keyset` instead.
@@ -136,6 +162,12 @@ You can also delete a keyset when you're done with it:
 ```javascript
 // Server
 Shopify.removeKeyset("default");
+```
+
+And you can check if a keyset exists by name:
+```javascript
+// Server
+Shopify.keysetExists(shopName); // => true or false
 ```
 
 ### Insecure Client
