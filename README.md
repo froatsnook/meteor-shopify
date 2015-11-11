@@ -68,6 +68,23 @@ var authenticator = new Shopify.PublicAppOAuthAuthenticator({
 authenticater.openAuthTab();
 ```
 
+NOTE: in the above scenario, the `access_token` is leaked to the client.  If this is a concern to you, then:
+
+```javascript
+// server/init.js
+Shopify.harden(); // do not send accessToken to client
+Shopify.onAuth(function(access_token, authConfig, userId) {
+    // You can store the access_token in the user object for future use.  Don't
+    // store it in the profile or it will leak to the client.
+    Meteor.users.update(userId, {
+        $set: {
+            shop: authConfig.shop,
+            access_token: access_token,
+        },
+    });
+});
+```
+
 `scopes` (Public Apps only) tell Shopify what access your app needs.  The user will be prompted to grant access to the scopes your App requests when he/she navigates to `authURL`.  The default is `"all"`, but a comma separated string like `"read_orders,read_products"` should be given to the authenticator if you know you don't need access to everything.  The supported scopes are:
 
 * `"read_content"`
