@@ -102,7 +102,7 @@ var = new Shopify.API({
 You can also use a keyset if you don't want the client to see the `access_token`.  In this case, be sure to call `Shopify.harden()` so that the client will not receive `access_token` as an `onAuth` parameter in `PublicAppOAuthAuthenticator`.
 
 ```javascript
-// On the server
+// On the server, e.g. server/init.js
 Shopify.harden();
 
 // On the client
