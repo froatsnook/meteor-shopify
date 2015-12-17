@@ -1,3 +1,13 @@
+Template.home.helpers({
+    settings() {
+        if (Meteor.settings && Meteor.settings.public) {
+            return JSON.stringify(Meteor.settings.public, null, 4);
+        }
+
+        return "";
+    }
+});
+
 Template.home.events({
     // Authenticate when #go button is clicked
     "click #go": function(e, t) {
@@ -61,6 +71,5 @@ Template.home.onRendered(function() {
     shopInput.val(localStorage.shop);
     apiKeyInput.val(localStorage.api_key);
     secretInput.val(localStorage.secret);
-
 });
 
