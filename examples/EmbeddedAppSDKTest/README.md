@@ -42,3 +42,5 @@ ShopifyApp.flashMessage("It works");
 
 See client/templates/testContent.js for an example of steps 5-7.
 
+You may need to set your Callback URL to `http://localhost:3000/__shopify-auth` (or your app's URL).
+
