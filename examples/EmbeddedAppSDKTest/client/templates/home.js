@@ -5,7 +5,7 @@ Template.home.helpers({
         }
 
         return "";
-    }
+    },
 });
 
 Template.home.events({
