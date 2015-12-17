@@ -1,3 +1,7 @@
+1.5.1 - 2015-12-17
+==================
+* Fix private API keyset use thanks to [toszter](https://github.com/toszter)
+
 1.5.0 - 2015-11-11
 ==================
 * Add server-side `Shopify.onAuth`
