@@ -7,7 +7,6 @@ Router.map(function() {
     // Shown in an iframe on your store
     this.route("testContent", {
         path: "/testContent"
-
     });
 });
 
