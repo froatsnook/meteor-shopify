@@ -1,3 +1,8 @@
+1.6.1 - 2015-12-19
+==================
+* Allow user to explicitly specify scopes as "all"
+* Add BasicExample
+
 1.6.0 - 2015-12-19
 ==================
 * The `hmac` returned by Shopify during auth is now checked (`Shopify.PublicAppOAuthAuthenticator` only).
