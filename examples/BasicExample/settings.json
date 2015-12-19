@@ -1,0 +1,6 @@
+{
+    "public": {
+        "api_key": "Your API Key"
+    },
+    "secret": "Your Shared Secret"
+}
