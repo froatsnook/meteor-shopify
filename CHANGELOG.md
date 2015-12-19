@@ -1,3 +1,8 @@
+1.6.0 - 2015-12-19
+==================
+* The `hmac` returned by Shopify during auth is now checked (`Shopify.PublicAppOAuthAuthenticator` only).
+* Added Shopify.ignoreHMACs to disable this check.
+
 1.5.1 - 2015-12-17
 ==================
 * Fix private API keyset use thanks to [toszter](https://github.com/toszter)
