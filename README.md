@@ -106,6 +106,13 @@ Shopify.onAuth(function(access_token, authConfig, userId) {
 
 See below for more OAuth options, like if you want to authenticate in an iframe or with your own UI.
 
+#### Signature verification
+As of 1.6.0, if you use `Shopify.PublicAppOAuthAuthenticator`, then the hmac sent by Shopify is verified during auth.  This uses the shared secret stored in your keyset.
+
+If the signature is invalid, an error message is shown: Shopify Auth failed because of invalid signature/shared secret.
+
+This behavior can be disabled by calling `Shopify.ignoreHMACs()`.
+
 ```javascript
 // Second-time Public App API access
 
