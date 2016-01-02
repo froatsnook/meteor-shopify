@@ -1,12 +1,12 @@
 # Setup
 
-## Step 1: create the app
+## Step 1: create the app (or clone this repo)
 ```
 meteor create BasicExample
 cd BasicExample
 ```
 
-## Step 2: add froatsnook:shopify
+## Step 2: add froatsnook:shopify (if you didn't clean this repo)
 ```
 meteor add froatsnook:shopify
 ```
@@ -16,6 +16,7 @@ meteor add froatsnook:shopify
 * Click Apps in the sidebar
 * Click the "Create app" button on the top-right
 * Fill in the details
+* Use `http://localhost:3000/__shopify-auth` (2 underscores) as the Redirection URL
 * Read and accept the developer TOS and then click Create Application
 
 ## Step 4: add credentials to settings.json

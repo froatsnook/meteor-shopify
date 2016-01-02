@@ -17,14 +17,32 @@ Template.BasicExample.helpers({
 Template.BasicExample.events({
     "click #login": function(e, t) {
         var shop = $("#shop").val();
+
+        // Your App has a keyset and a secret.  The client only knows the
+        // api_key.  Using Shopify's OAuth, the PublicAppOAuthAuthenticator
+        // opens a new tab where the user can login and grant your app access
+        // to his/her data.
         var authenticator = new Shopify.PublicAppOAuthAuthenticator({
+            // "my-shop" in my-shop.myshopify.com
             shop: shop,
+
+            // Your shop's api_key taken from settings.json
             api_key: Meteor.settings.public.api_key,
-            keyset: "auth", // this keyset is defined in BasicExample/server/startup.js
+
+            // This keyset is defined in BasicExample/server/startup.js.  This
+            // is required so that your app's secret can be used during auth.
+            keyset: "auth",
+
+            // This indicates that your app will use all the permissions shopify gives.
             scopes: "all",
+
+            // After successful authentication, the server-side onAuth will be
+            // called first (see server/startup.js).  Then the callback you
+            // specify here will be called.
             onAuth: makeAPI,
         });
 
+        // Start the auth flow.
         authenticator.openAuthTab();
     },
 });
@@ -46,12 +64,15 @@ function makeAPI() {
     // profile.
     var keyset = shop;
 
+    // The API object allows you to access shop data.
     console.log("Creating API...");
     var api = new Shopify.API({
         shop: shop,
         keyset: keyset,
     });
 
+    // Shopify.API#countOrders counts the number of open orders for the
+    // authenticated shop.
     console.log("Counting orders...");
     api.countOrders(function(err, count) {
         if (err) {

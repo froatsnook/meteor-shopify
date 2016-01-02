@@ -21,7 +21,8 @@ Shopify.addKeyset("auth", {
     secret: Meteor.settings.secret
 });
 
-// Create a shop keyset whenever a user authenticates.
+// Create a shop keyset whenever a user authenticates.  This authentication
+// happens as a result of calling PublicAppOAuthAuthenticator.openAuthTab().
 Shopify.onAuth(function(accessToken, authConfig) {
     var shop = authConfig.shop;
     Shopify.addKeyset(shop, {
