@@ -23,7 +23,7 @@ ecmascript-runtime@0.2.6
 ejson@1.0.7
 es5-shim@4.1.14
 fastclick@1.0.7
-froatsnook:shopify@1.6.0
+froatsnook:shopify@1.6.1
 froatsnook:sleep@1.1.0
 geojson-utils@1.0.4
 hot-code-push@1.0.0
