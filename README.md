@@ -65,7 +65,7 @@ var authenticator = new Shopify.PublicAppOAuthAuthenticator({
     }
 });
 
-authenticater.openAuthTab();
+authenticator.openAuthTab();
 ```
 
 NOTE: in the above scenario, the `access_token` is leaked to the client.  If this is a concern to you, then:
