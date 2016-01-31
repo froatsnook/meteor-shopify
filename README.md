@@ -304,6 +304,16 @@ This library does its best to not exceed the Shopify rate limit of one call each
 
 With each reply, Shopify returns a `X-Shopify-Shopify` header like `"32/40"`.  Once this reaches the `api.config.backoff` (default `35`), API calls will be queued and fired each half second until again below the backoff limit.
 
+## Notes on OAuth
+You may find the authentication process confusing.  Sorry about that.  We're trying to improve it!
+
+Probably the easiest solution would have been an `accounts-meteor` package.  But as far as I understand it, this precludes multiple shops per user.  The current system is flexible, but it means you'll have some work to do in order to make things secure.
+
+[@dbnoble](https://github.com/dbnoble) has provided these gists which might help you get on your feet:
+
+* [Authentication without accounts for froatsnook:shopify](https://gist.github.com/dbnoble/1120dafcf44cc8f60f46)
+* [Authentication with accounts for froatsnook:shopify](https://gist.github.com/dbnoble/8867b392f89462732495)
+
 ## Custom OAuth
 `PublicAppOAuthAuthenticator.openAuthTab` is provided as the simplest way to do OAuth.  However, you can also take control at various steps in the process if you want a more customized experience.
 
