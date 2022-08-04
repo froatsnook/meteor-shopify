@@ -1,5 +1,8 @@
 Shopify API access for Meteor.
 
+## how to install package into your project 
+```$ meteor add froatsnook:shopify```
+
 ## Simple, Convenient, Synchronous
 ```javascript
 // Server
